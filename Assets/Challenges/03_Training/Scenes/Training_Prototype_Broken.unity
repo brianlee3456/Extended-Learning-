@@ -18585,12 +18585,24 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   handle: {fileID: 912901134}
-  start: {fileID: 0}
-  end: {fileID: 0}
-  defaultValue: 0.5
+  start: {fileID: 1781061136}
+  end: {fileID: 1397801936}
+  defaultValue: 0.44
   OnValueChange:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7541936462315295366}
+        m_TargetAssemblyTypeName: MagnetSpeedControl, Assembly-CSharp
+        m_MethodName: SetSpeed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument:
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1781061135
 GameObject:
   m_ObjectHideFlags: 0
@@ -32550,11 +32562,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0417e6687dad66541ad9cc445158cbb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  magnet: {fileID: 0}
+  magnet: {fileID: 2093529275998283900}
   minSpeed: 1
   maxSpeed: 10
   defaultValue: 0.44
-  socket: {fileID: 0}
+  socket: {fileID: 8477993898470408151}
   ratedSpeed: 6
   graceSeconds: 2
   readout: {fileID: 0}
