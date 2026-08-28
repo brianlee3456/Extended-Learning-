@@ -47,10 +47,20 @@ public class XRButton : XRBaseInteractable
         hoverInteractor = eventArgs.interactorObject;
         hoverHeight = GetLocalYPosition(hoverInteractor.transform.position);
         startHeight = buttonTransform.localPosition.y;
+
+        Debug.Log($"[XRButton:{name}] StartPress -> interactor={eventArgs.interactorObject}, hoverHeight={hoverHeight:F4}, startHeight={startHeight:F4}, yMin={yMin:F4}, yMax={yMax:F4}");
     }
 
     private void EndPress(HoverExitEventArgs eventArgs)
     {
+        if (hoverInteractor != eventArgs.interactorObject)
+        {
+            Debug.Log($"[XRButton:{name}] EndPress ignored - exiting interactor was not the tracked one");
+            return;
+        }
+
+        Debug.Log($"[XRButton:{name}] EndPress -> clearing hoverInteractor, resetting to yMax={yMax:F4}");
+
         hoverInteractor = null;
         hoverHeight = 0.0f;
         startHeight = 0.0f;
@@ -60,10 +70,17 @@ public class XRButton : XRBaseInteractable
     private void Start()
     {
         SetMinMax();
+        Debug.Log($"[XRButton:{name}] Start -> buttonTransform={(buttonTransform ? buttonTransform.name : "NULL")}, localY={(buttonTransform ? buttonTransform.localPosition.y.ToString("F4") : "N/A")}, pressDistance={pressDistance}, yMin={yMin:F4}, yMax={yMax:F4}");
     }
 
     private void SetMinMax()
     {
+        if (buttonTransform == null)
+        {
+            Debug.LogError($"[XRButton:{name}] buttonTransform is NULL - cannot compute yMin/yMax!");
+            return;
+        }
+
         yMin = buttonTransform.localPosition.y - pressDistance;
         yMax = buttonTransform.localPosition.y;
     }
@@ -72,9 +89,10 @@ public class XRButton : XRBaseInteractable
     {
         if(updatePhase == XRInteractionUpdateOrder.UpdatePhase.Dynamic)
         {
-            if (isHovered)
+            if (isHovered && hoverInteractor != null)
             {
                 float height = FindButtonHeight();
+                Debug.Log($"[XRButton:{name}] ProcessInteractable -> computed height={height:F4} (yMin={yMin:F4}, yMax={yMax:F4}), current buttonTransform.y={buttonTransform.localPosition.y:F4}");
                 ApplyHeight(height);
             }
         }
@@ -113,6 +131,8 @@ public class XRButton : XRBaseInteractable
         if(inPosition != previousPress)
         {
             previousPress = inPosition;
+
+            Debug.Log($"[XRButton:{name}] CheckPress -> state changed to {(inPosition ? "PRESSED" : "RELEASED")} (buttonTransform.y={buttonTransform.localPosition.y:F4}, threshold={yMin + (pressDistance * 0.5f):F4})");
 
             if(inPosition)
             {
